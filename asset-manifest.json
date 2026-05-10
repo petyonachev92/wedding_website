@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/css/main.0b5aa7a4.css",
+    "main.js": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/js/main.06524a46.js",
+    "static/js/453.eca5f793.chunk.js": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/js/453.eca5f793.chunk.js",
+    "index.html": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/index.html",
+    "main.0b5aa7a4.css.map": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/css/main.0b5aa7a4.css.map",
+    "main.06524a46.js.map": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/js/main.06524a46.js.map",
+    "453.eca5f793.chunk.js.map": "/[https://petyonachev92.github.io/wedding_website](https://petyonachev92.github.io/wedding_website)/static/js/453.eca5f793.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0b5aa7a4.css",
+    "static/js/main.06524a46.js"
+  ]
+}
