@@ -89,7 +89,7 @@ function App() {
           </div>
           
           <div className="image-wrap">
-            <img src="../public/images/MPN03337.JPG" alt="Wedding Couple" className="mid-photo" />
+            <img src="https://raw.githubusercontent.com/petyonachev92/wedding_website/refs/heads/main/client/public/images/MPN03337.JPG" alt="Wedding Couple" className="mid-photo" />
           </div>
         </div>
       </section>
@@ -104,28 +104,33 @@ function App() {
               <h3>АВГУСТ 2026</h3>
             </div>
             <div className="calendar-grid">
-              {/* Days of the week labels */}
               {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'].map(day => (
                 <div key={day} className="calendar-day-label">{day}</div>
               ))}
-
-              {/* Empty slots for days before August 1st (which is a Saturday) */}
-              {[...Array(5)].map((_, i) => <div key={i} className="empty"></div>)}
-
-              {/* Days of the month */}
+              
+              {/* Empty slots for August 2026 (Starts on Saturday) */}
+              {[...Array(5)].map((_, i) => <div key={`empty-${i}`} className="empty"></div>)}
+              
               {[...Array(31)].map((_, i) => {
                 const day = i + 1;
                 const isWeddingDay = day === 23;
                 return (
-                  <div key={day} className={`calendar-date ${isWeddingDay ? 'wedding-day' : ''}`}>
-                    {day}
-                    {isWeddingDay && <motion.div 
-                      className="gold-circle"
-                      initial={{ scale: 0, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.5, duration: 0.5 }}
-                    />}
+                  <div key={day} className="calendar-date-wrapper">
+                    <div className={`calendar-date ${isWeddingDay ? 'wedding-day' : ''}`}>
+                      {day}
+                      {isWeddingDay && (
+                        <motion.div 
+                          className="ring-marker"
+                          initial={{ scale: 0, opacity: 0, rotate: -45 }}
+                          whileInView={{ scale: 1, opacity: 1, rotate: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.5, duration: 0.6, type: "spring" }}
+                        >
+                          {/* Visual Ring Shape using CSS */}
+                          <div className="diamond"></div>
+                        </motion.div>
+                      )}
+                    </div>
                   </div>
                 );
               })}

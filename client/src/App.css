@@ -175,6 +175,59 @@ body {
 }
 
 /* CALENDAR SECTION */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.calendar-date-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1; /* Ensures each cell is a perfect square */
+  position: relative;
+}
+
+.calendar-date {
+  font-size: 0.9rem;
+  color: #888;
+  z-index: 2;
+  position: relative;
+}
+
+.wedding-day {
+  color: var(--text) !important;
+  font-weight: 700;
+}
+
+/* THE RING MARKER */
+.ring-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 35px;
+  height: 35px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* THE DIAMOND ON TOP */
+.diamond {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border: 2px solid var(--gold);
+}
 .calendar-section {
   padding: 80px 0;
   background-color: var(--bg);
@@ -222,12 +275,36 @@ body {
   color: #888;
 }
 
+.calendar-date {
+  position: relative; /* This is the anchor */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px; 
+  width: 100%;
+  z-index: 1;
+}
+
+.wedding-day .gold-circle {
+  position: absolute;
+  /* Instead of top/left 50%, we let flexbox center it or use this: */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  width: 38px; /* Slightly larger than the date text */
+  height: 38px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none; /* Prevents the circle from blocking clicks */
+  z-index: 2;
+}
+
 .wedding-day {
   color: var(--text);
   font-weight: bold;
 }
 
-/* THE GOLD CIRCLE AROUND 23 */
+/* THE GOLD CIRCLE AROUND 23
 .gold-circle {
   position: absolute;
   width: 32px;
@@ -238,7 +315,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-}
+} */
 
 /* Ensure empty slots don't break the grid */
 .empty { height: 35px; }
