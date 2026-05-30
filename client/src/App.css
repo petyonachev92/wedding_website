@@ -1,25 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@200;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@200;400;500;600&display=swap');
 
 :root {
-  --sage: #B2AC88;
+  --sage: #A4C3B2;       /* Premium Light Mint Green */
   --gold: #C5A059;
   --bg: #FFFFFF;
+  --bg-soft: #F4F7F5;    /* Luxury ultra-faint mint cream to fill out empty space */
   --text: #333333;
+  --radius-soft: 16px;   /* Organic rounded corners for cards and blocks */
+  --radius-pill: 30px;   /* Perfectly rounded edges for buttons and navigation */
+  
+  /* Strict Typography Design Variables */
+  --font-classy: 'Cormorant Garamond', serif;
+  --font-clean: 'Montserrat', sans-serif;
 }
 
 html { scroll-behavior: smooth; }
 
+/* GLOBAL FONTS RESET */
+body, 
+input, 
+select, 
+textarea, 
+button, 
+.sticky-nav a, 
+.t-item span, 
+.t-item p, 
+.calendar-date, 
+.hero-label,
+.map-card-overlay span {
+  font-family: var(--font-clean);
+}
+
+h1, h2, h3, h4, 
+.section-title, 
+.location-name, 
+.quote-text,
+.footer p {
+  font-family: var(--font-classy);
+}
+
 body {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
   color: var(--text);
   background-color: var(--bg);
 }
 
-/* HERO */
+/* GLOBAL WRAPPER */
+.timeless-wrapper {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* HERO SECTION */
 .hero-section {
   height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+  background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), 
               url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2000');
   background-size: cover;
   background-position: center;
@@ -31,109 +66,281 @@ body {
   color: white;
 }
 
-.hero-label { letter-spacing: 5px; font-size: 0.8rem; }
-.hero-section h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 5rem); margin: 15px 0; }
-.gold-line { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 20px; }
-
-/* NAV */
-.sticky-nav {
-  position: sticky;
-  top: 0;
-  background: white;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.sticky-nav a {
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  font-weight: 500;
-}
-
-/* CONTENT LAYOUT */
-.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
-.info-section, .program-section, .rsvp-section { padding: 100px 0; text-align: center; }
-
-.section-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--sage); margin-bottom: 20px; }
-.main-text { font-size: 1.1rem; line-height: 1.8; max-width: 600px; margin: 0 auto 50px; }
-
-.mid-photo { width: 100%; max-height: 500px; object-fit: cover; border-radius: 2px; }
-
-/* PARALLAX IMAGE */
-.parallax-divider {
-  height: 50vh;
-  background-image: url('../public/images/MPN03338.JPG');
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center -350px;
-}
-
-/* TIMELINE */
-.timeline-list { margin-top: 40px; }
-.t-item {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-.t-item span { font-weight: bold; color: var(--gold); min-width: 80px; }
-
-/* RSVP */
-.rsvp-section { background-color: #fcfbf9; }
-.rsvp-box { background: white; padding: 50px; border-radius: 4px; box-shadow: 0 5px 25px rgba(0,0,0,0.03); }
-
-.elegant-form { display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 30px auto 0; }
-.elegant-form input, .elegant-form select, .elegant-form textarea {
-  padding: 15px;
-  border: 1px solid #ddd;
-  font-family: inherit;
-}
-
-.gold-btn {
-  background: var(--sage);
-  color: white;
-  border: none;
-  padding: 18px;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.gold-btn:hover { background: var(--gold); }
-
-.footer { padding: 80px 0; text-align: center; font-size: 0.8rem; letter-spacing: 2px; }
-
-.sticky-nav a, .gold-btn {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .hero-content {
-  /* This ensures the text stays centered even during the "y" axis movement */
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden; 
 }
 
-/* LOCATION SECTION */
-.location-section {
-  padding: 80px 0;
-  background-color: #ffffff;
+.hero-label { letter-spacing: 5px; font-size: 0.8rem; }
+.hero-section h1 { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 500; margin: 15px 0; }
+.gold-line { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 20px; }
+
+/* NAVIGATION (Floating Pill Redesign) */
+.sticky-nav {
+  position: sticky;
+  top: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  z-index: 1000;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 30px rgba(164, 195, 178, 0.15);
+}
+
+.sticky-nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 500;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sticky-nav a:hover {
+  color: var(--sage);
+}
+
+/* CONTENT LAYOUT & ALTERNATING SECTIONS */
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+.info-section { padding: 60px 0; text-align: center; background-color: var(--bg); }
+.program-section { padding: 60px 0; text-align: center; background-color: var(--bg-soft); }
+.location-section { padding: 60px 0; text-align: center; background-color: var(--bg); }
+.rsvp-section { padding: 60px 0; text-align: center; background-color: var(--bg-soft); }
+
+/* REDESIGNED CLASSY H2 HEADINGS */
+h2, .section-title { 
+  font-size: 3.2rem;       /* Enhanced size to fully showcase luxury serif fine lines */
+  font-weight: 500; 
+  letter-spacing: 1.5px;   /* Added breathing room between letters */
+  color: var(--sage); 
+  margin-bottom: 25px; 
+  line-height: 1.2;
+}
+
+.main-text { font-size: 1.1rem; line-height: 1.9; max-width: 630px; margin: 0 auto 50px; color: #555; }
+
+/* ROMANTIC QUOTE BANNER */
+.quote-banner {
+  padding: 60px 20px;
+  background: var(--bg-soft);
+  text-align: center;
+  border-top: 1px solid rgba(164, 195, 178, 0.15);
+  border-bottom: 1px solid rgba(164, 195, 178, 0.15);
+}
+
+.quote-text {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--text);
+  max-width: 550px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* IMAGES */
+.mid-photo { 
+  width: 100%; 
+  max-height: 550px; 
+  object-fit: cover; 
+  border-radius: var(--radius-soft); 
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+/* PARALLAX IMAGE */
+.parallax-divider {
+  height: 55vh;
+  background-image: url('https://raw.githubusercontent.com/petyonachev92/wedding_website/refs/heads/main/client/public/images/MPN03338.JPG');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+/* OPTICALLY BALANCED ASYMMETRIC TIMELINE */
+.timeline-list { 
+  margin-top: 40px; 
+  background: white;
+  padding: 40px;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 10px 30px rgba(164, 195, 178, 0.08);
+  max-width: 420px; 
+  margin-left: auto;
+  margin-right: auto;
+  position: relative; 
+}
+
+/* Shifting the anchor line leftward to match the squeezed time column */
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  bottom: 40px;
+  left: 35%; /* Moved left from 50% to balance the layout */
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(197, 160, 89, 0.25) 15%, rgba(197, 160, 89, 0.25) 85%, transparent);
+  transform: translateX(-50%);
+}
+
+.t-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2; 
+  padding: 16px 0;
+}
+
+/* LEFT SIDE: Squeezed down to 32% to perfectly frame the short timestamps */
+.t-item span { 
+  font-weight: 600; 
+  color: var(--gold); 
+  width: 32%; 
+  text-align: right; 
+  padding-right: 20px; 
+  box-sizing: border-box;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* RIGHT SIDE: Expanded to 68% to give descriptions maximum breathing room */
+.t-item p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+  width: 68%; 
+  text-align: left; 
+  padding-left: 20px; 
+  box-sizing: border-box;
+  line-height: 1.3; /* Added slight padding for clean text-wrapping if needed */
+}
+
+/* CALENDAR SECTION */
+.calendar-section {
+  padding: 100px 0;
+  background-color: var(--bg);
   text-align: center;
 }
 
-.location-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  margin-bottom: 5px;
+.calendar-card {
+  max-width: 350px;
+  margin: 0 auto;
+  background: white;
+  padding: 35px 30px;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 15px 40px rgba(164, 195, 178, 0.1);
+  border: 1px solid #eef2ef;
+  cursor: pointer; 
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
+.calendar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(164, 195, 178, 0.18);
+}
+
+.calendar-click-hint {
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  margin: 25px 0 0 0;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.calendar-card:hover .calendar-click-hint {
+  color: var(--sage); 
+}
+
+.calendar-header h3 {
+  font-weight: 600;
+  letter-spacing: 3px;
+  font-size: 1.3rem;
   color: var(--text);
+  margin-bottom: 25px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.calendar-day-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--sage);
+  margin-bottom: 10px;
+}
+
+.calendar-date-wrapper {
+  position: relative;
+  width: 100%;
+  height: 40px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-date {
+  font-size: 0.95rem;
+  color: #777;
+  z-index: 5;
+  position: relative;
+  line-height: 1; 
+  pointer-events: none;
+}
+
+.wedding-day {
+  color: var(--text) !important;
+  font-weight: 700;
+}
+
+/* THE RING MARKER & DIAMOND */
+.ring-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important; 
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.diamond {
+  position: absolute;
+  top: -5px;
+  left: calc(50% - 4px); 
+  width: 6px;
+  height: 6px;
+  background: white;
+  border: 2px solid var(--gold);
+  transform: rotate(45deg);
+  z-index: 3;
+}
+
+.empty { height: 35px; }
+
+/* REDESIGNED INTERACTIVE LOCATION CARD EXECUTIONS */
+.location-name {
+  font-size: 2.1rem;        /* Scaled slightly upwards to match the new H2 balance profile */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--gold);       /* Updated from dark grey to theme gold to pop beautifully */
+  margin-bottom: 8px;
+  line-height: 1.3;
 }
 
 .location-address {
@@ -142,14 +349,52 @@ body {
   margin-bottom: 30px;
 }
 
-.map-wrapper {
+.map-image-card {
+  position: relative;
   max-width: 800px;
+  height: 400px;
   margin: 0 auto 30px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(164, 195, 178, 0.15);
+  border-radius: var(--radius-soft);
   overflow: hidden;
+  cursor: pointer;
 }
 
+.map-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map-card-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  transition: background 0.4s ease;
+}
+
+.map-card-overlay span {
+  color: white;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-pill);
+  transition: all 0.4s ease;
+}
+
+.map-image-card:hover .map-card-img { transform: scale(1.03); }
+.map-image-card:hover .map-card-overlay { background: rgba(164, 195, 178, 0.3); }
+.map-image-card:hover .map-card-overlay span { background: var(--sage); border-color: var(--sage); }
+
+/* SOFT BUTTONS */
 .directions-btn {
   display: inline-block;
   padding: 15px 35px;
@@ -160,162 +405,245 @@ body {
   font-size: 0.8rem;
   letter-spacing: 2px;
   font-weight: 600;
-  transition: 0.3s;
-  border-radius: 2px;
+  transition: all 0.3s ease;
+  border-radius: var(--radius-pill);
 }
 
 .directions-btn:hover {
   background-color: var(--sage);
   color: white;
+  box-shadow: 0 5px 15px rgba(164, 195, 178, 0.3);
 }
 
-/* Add Location to Sticky Nav if you like */
-.sticky-nav {
-  /* No changes needed, just ensure you add the <a> tag in App.js if you want a shortcut */
-}
-
-/* CALENDAR SECTION */
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  max-width: 320px;
-  margin: 0 auto;
-}
-
-.calendar-date-wrapper {
+/* RSVP SYSTEM DESIGN UPDATE */
+.rsvp-box { 
+  background: white; 
+  padding: 50px; 
+  border-radius: var(--radius-soft); 
+  box-shadow: 0 15px 45px rgba(164, 195, 178, 0.1); 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  aspect-ratio: 1 / 1; /* Ensures each cell is a perfect square */
+}
+
+.elegant-form { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+  width: 100%;
+  max-width: 550px; 
+  margin: 30px auto 0; 
+}
+
+.guests-loop-container,
+.elegant-form textarea,
+.add-guest-action-btn,
+.gold-btn {
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+.guest-row-card {
+  background: #fafbfa;
+  border: 1px solid #eef2ef;
+  border-left: 4px solid var(--sage);
+  padding: 25px;
+  border-radius: var(--radius-soft);
+  text-align: left;
+  box-sizing: border-box; 
+}
+
+.guest-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.guest-row-header h4 {
+  margin: 0;
+  font-size: 1.2rem; 
+  letter-spacing: 0.5px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.remove-guest-btn {
+  background: transparent;
+  border: none;
+  color: #c94a4a;
+  font-size: 0.75rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+/* VERTICAL FORM STACK LAYOUT CONFIGURATION */
+.guest-fields-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-field-row {
+  width: 100%;
   position: relative;
 }
 
-.calendar-date {
-  font-size: 0.9rem;
-  color: #888;
-  z-index: 2;
-  position: relative;
+.guest-fields-stack input,
+.guest-fields-stack select,
+.elegant-form textarea {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 16px 20px; 
+  border: 1px solid #e2e8e4;
+  background-color: white;
+  border-radius: 12px; 
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.wedding-day {
-  color: var(--text) !important;
-  font-weight: 700;
+.guest-fields-stack input:focus, 
+.guest-fields-stack select:focus, 
+.elegant-form textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(164, 195, 178, 0.12);
 }
 
-/* THE RING MARKER */
-.ring-marker {
+.guest-fields-stack select {
+  cursor: pointer;
+  appearance: none; 
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C5A059' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 16px;
+  padding-right: 45px; 
+}
+
+.add-guest-action-btn {
+  background: transparent;
+  border: 1px dashed var(--sage);
+  color: var(--sage);
+  padding: 15px; 
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px 0;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+}
+
+.add-guest-action-btn:hover {
+  background: rgba(164, 195, 178, 0.1); 
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.gold-btn {
+  background: var(--sage);
+  color: white;
+  border: none;
+  padding: 18px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 5px 20px rgba(164, 195, 178, 0.2);
+}
+
+.gold-btn:hover { 
+  background: var(--gold); 
+  box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3);
+}
+
+/* FOOTER */
+.footer { padding: 80px 0; text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #777; }
+
+/* ERROR CONTAINERS */
+.error-message-box {
+  background-color: #FDF4F4; 
+  border-left: 4px solid #C94A4A; 
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-align: left;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.error-message-box p {
+  margin: 0;
+  color: #C94A4A;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* SUCCESS TEXT LAYOUT PANELS */
+.success-message-wrapper {
+  text-align: center;
+  padding: 30px 10px;
+  position: relative; 
+}
+
+.success-message-wrapper h3 {
+  font-size: 2.6rem;
+  color: var(--sage);
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+
+.welcome-message-text {
+  font-family: var(--font-classy); 
+  font-size: 1.6rem;
+  color: var(--text);
+  margin: 0;
+  font-style: italic;
+}
+
+.welcome-message-text.neutral {
+  font-family: var(--font-clean);
+  font-size: 1rem;
+  color: #777777;
+  font-style: normal;
+}
+
+/* TRUE WINDOW VIEWPORT FIXED CONFETTI ENGINE */
+.confetti-container {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; 
+  z-index: 9999; 
+  overflow: hidden;
+}
+
+.confetti-piece {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 35px;
-  height: 35px;
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  z-index: 1;
+  top: -20px;
   pointer-events: none;
 }
 
-/* THE DIAMOND ON TOP */
-.diamond {
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 8px;
-  height: 8px;
-  background: white;
-  border: 2px solid var(--gold);
+/* MEDIA QUERIES FOR MOBILE COMPATIBILITY */
+@media (max-width: 768px) {
+  .guest-fields-stack input,
+  .guest-fields-stack select,
+  .elegant-form textarea {
+    padding: 14px 16px;
+  }
+  .sticky-nav {
+    width: 85%;
+    top: 10px;
+    gap: 15px;
+    padding: 12px 20px;
+  }
+  h2, .section-title {
+    font-size: 2.4rem; /* Balanced downgrade scaling rule for mobile touch displays */
+  }
 }
-.calendar-section {
-  padding: 80px 0;
-  background-color: var(--bg);
-  text-align: center;
-}
-
-.calendar-card {
-  max-width: 350px;
-  margin: 0 auto;
-  background: white;
-  padding: 30px;
-  border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-  border: 1px solid #f0f0f0;
-}
-
-.calendar-header h3 {
-  font-family: 'Montserrat', sans-serif;
-  letter-spacing: 4px;
-  font-size: 1rem;
-  color: var(--text);
-  margin-bottom: 25px;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-}
-
-.calendar-day-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--sage);
-  margin-bottom: 10px;
-}
-
-.calendar-date {
-  font-size: 0.9rem;
-  position: relative;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #888;
-}
-
-.calendar-date {
-  position: relative; /* This is the anchor */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px; 
-  width: 100%;
-  z-index: 1;
-}
-
-.wedding-day .gold-circle {
-  position: absolute;
-  /* Instead of top/left 50%, we let flexbox center it or use this: */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
-  width: 38px; /* Slightly larger than the date text */
-  height: 38px;
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  pointer-events: none; /* Prevents the circle from blocking clicks */
-  z-index: 2;
-}
-
-.wedding-day {
-  color: var(--text);
-  font-weight: bold;
-}
-
-/* THE GOLD CIRCLE AROUND 23
-.gold-circle {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-} */
-
-/* Ensure empty slots don't break the grid */
-.empty { height: 35px; }
