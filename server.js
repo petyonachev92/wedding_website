@@ -5,26 +5,21 @@ const path = require('path');
 
 const app = express();
 
-// 1. MIDDLEWARES
+// 1. MIDDLEWARES (Must be loaded before routes to parse the incoming data)
 app.use(cors());
 app.use(express.json());
 
-// 2. CONNECT TO MONGO_DB ATLAS VIA SECURE ENVIRONMENT VARIABLES
+// 2. MONGOOSE CONNECTION
 const MONGO_URI = process.env.MONGO_URI; 
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('Connected to MongoDB Atlas.'))
+  .catch((err) => console.error('Database error:', err));
 
-if (!MONGO_URI) {
-  console.error("CRITICAL ERROR: MONGO_URI environment variable is missing!");
-} else {
-  mongoose.connect(MONGO_URI)
-    .then(() => console.log('Successfully connected to MongoDB Atlas Cloud.'))
-    .catch((err) => console.error('Database connection failure:', err));
-}
-
-// 3. DEFINE DATA SCHEMA MODELS
+// 3. SCHEMAS
 const GuestSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
-  status: { type: String, required: true, enum: ['yes', 'no'] },
-  menu: { type: String, required: false } // Stripped out for non-attending guests
+  status: { type: String, required: true },
+  menu: { type: String, required: false }
 });
 
 const RsvpSchema = new mongoose.Schema({
@@ -35,47 +30,36 @@ const RsvpSchema = new mongoose.Schema({
 
 const Rsvp = mongoose.model('Rsvp', RsvpSchema);
 
-// 4. API ENDPOINTS
-// Light heartbeat endpoint to keep the server awake using cron-jobs
-app.get('/api/ping', (req, res) => {
-  res.status(200).send('Alive');
-});
-
-// The principal RSVP submission handler
+// 4. THE CORRECTED LISTENER (Matches your frontend root POST request)
 app.post('/', async (req, res) => {
   try {
     const { message, guests } = req.body;
 
     if (!guests || !Array.isArray(guests) || guests.length === 0) {
-      return res.status(400).json({ success: false, error: "Missing guest records." });
+      return res.status(400).json({ success: false, error: "Missing guest data." });
     }
 
-    // Backend validation guardrail
-    for (const guest of guests) {
-      if (!guest.name || !guest.name.trim() || !guest.status) {
-        return res.status(400).json({ success: false, error: "Each guest requires a name and status." });
-      }
-    }
-
+    // Save directly to your cloud collection
     const newRsvp = new Rsvp({ guests, message });
     await newRsvp.save();
 
-    return res.status(200).json({ success: true, message: "RSVP saved successfully!" });
+    return res.status(200).json({ success: true, message: "Saved!" });
   } catch (error) {
-    console.error("Database save execution error:", error);
+    console.error("MongoDB Save Error:", error);
     return res.status(500).json({ success: false, error: "Internal Server Error." });
   }
 });
 
-// 5. SERVE FRONTEND STATIC FILES (For unified Render deployment)
-// Compares and looks for files inside your client build folder (change 'build' to 'dist' if using Vite)
-app.use(express.static(path.join(__dirname, 'client/build')));
+// Keep-awake ping route
+app.get('/api/ping', (req, res) => {
+  res.status(200).send('Alive');
+});
 
-// Fallback rule: routes anything that isn't an API endpoint back to React's index.html
+// 5. SERVE STATIC FILES
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-// 6. START SERVER ENGINE
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running smoothly on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server operating on port ${PORT}`));
