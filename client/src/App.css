@@ -51,19 +51,31 @@ body {
   position: relative;
 }
 
-/* HERO SECTION */
+/* ==========================================================================
+   MODERN HIGH-PERFORMANCE PARALLAX CLIPPED ENGINE 
+   ========================================================================== */
 .hero-section {
+  position: relative;
   height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), 
-              url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2000');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: white;
+  clip-path: inset(0 0 0 0);
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), 
+              url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2000');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  will-change: transform;
 }
 
 .hero-content {
@@ -77,21 +89,28 @@ body {
 .hero-section h1 { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 500; margin: 15px 0; }
 .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 20px; }
 
-/* NAVIGATION (Floating Pill Redesign) */
+/* NAVIGATION SYSTEM LAYER (DESKTOP DEFAULT) */
 .sticky-nav {
   position: sticky;
   top: 20px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(5px);
   padding: 15px 30px;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
   z-index: 1000;
   max-width: 500px;
   margin: 0 auto;
   border-radius: var(--radius-pill);
   box-shadow: 0 10px 30px rgba(164, 195, 178, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
 }
 
 .sticky-nav a {
@@ -107,6 +126,10 @@ body {
   color: var(--sage);
 }
 
+.menu-toggle {
+  display: none;
+}
+
 /* CONTENT LAYOUT & ALTERNATING SECTIONS */
 .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 
@@ -115,11 +138,11 @@ body {
 .location-section { padding: 60px 0; text-align: center; background-color: var(--bg); }
 .rsvp-section { padding: 60px 0; text-align: center; background-color: var(--bg-soft); }
 
-/* REDESIGNED CLASSY H2 HEADINGS */
+/* LUXURY H2 TYPOGRAPHY */
 h2, .section-title { 
-  font-size: 3.2rem;       /* Enhanced size to fully showcase luxury serif fine lines */
+  font-size: 3.2rem;       
   font-weight: 500; 
-  letter-spacing: 1.5px;   /* Added breathing room between letters */
+  letter-spacing: 1.5px;   
   color: var(--sage); 
   margin-bottom: 25px; 
   line-height: 1.2;
@@ -155,13 +178,23 @@ h2, .section-title {
   box-shadow: 0 15px 40px rgba(0,0,0,0.06);
 }
 
-/* PARALLAX IMAGE */
+/* HIGH-PERFORMANCE CLIPPED PARALLAX IMAGE DIVIDER */
 .parallax-divider {
+  position: relative;
   height: 55vh;
+  clip-path: inset(0 0 0 0);
+  overflow: hidden;
+}
+
+.parallax-divider::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
   background-image: url('https://raw.githubusercontent.com/petyonachev92/wedding_website/refs/heads/main/client/public/images/MPN03338.JPG');
-  background-attachment: fixed;
   background-size: cover;
   background-position: center;
+  z-index: -1;
+  will-change: transform;
 }
 
 /* OPTICALLY BALANCED ASYMMETRIC TIMELINE */
@@ -177,13 +210,12 @@ h2, .section-title {
   position: relative; 
 }
 
-/* Shifting the anchor line leftward to match the squeezed time column */
 .timeline-list::before {
   content: '';
   position: absolute;
   top: 40px;
   bottom: 40px;
-  left: 35%; /* Moved left from 50% to balance the layout */
+  left: 35%; 
   width: 1px;
   background: linear-gradient(to bottom, transparent, rgba(197, 160, 89, 0.25) 15%, rgba(197, 160, 89, 0.25) 85%, transparent);
   transform: translateX(-50%);
@@ -197,7 +229,6 @@ h2, .section-title {
   padding: 16px 0;
 }
 
-/* LEFT SIDE: Squeezed down to 32% to perfectly frame the short timestamps */
 .t-item span { 
   font-weight: 600; 
   color: var(--gold); 
@@ -209,7 +240,6 @@ h2, .section-title {
   line-height: 1;
 }
 
-/* RIGHT SIDE: Expanded to 68% to give descriptions maximum breathing room */
 .t-item p {
   margin: 0;
   font-size: 1rem;
@@ -218,10 +248,10 @@ h2, .section-title {
   text-align: left; 
   padding-left: 20px; 
   box-sizing: border-box;
-  line-height: 1.3; /* Added slight padding for clean text-wrapping if needed */
+  line-height: 1.3; 
 }
 
-/* CALENDAR SECTION */
+/* CALENDAR SECTION INTERACTIVITY */
 .calendar-section {
   padding: 100px 0;
   background-color: var(--bg);
@@ -305,7 +335,6 @@ h2, .section-title {
   font-weight: 700;
 }
 
-/* THE RING MARKER & DIAMOND */
 .ring-marker {
   position: absolute;
   top: 50%;
@@ -333,12 +362,12 @@ h2, .section-title {
 
 .empty { height: 35px; }
 
-/* REDESIGNED INTERACTIVE LOCATION CARD EXECUTIONS */
+/* REBALANCED VISUAL WEIGHT LOCATION CARDS */
 .location-name {
-  font-size: 2.1rem;        /* Scaled slightly upwards to match the new H2 balance profile */
+  font-size: 2.1rem;        
   font-weight: 500;
   letter-spacing: 0.5px;
-  color: var(--gold);       /* Updated from dark grey to theme gold to pop beautifully */
+  color: var(--gold);       
   margin-bottom: 8px;
   line-height: 1.3;
 }
@@ -394,28 +423,7 @@ h2, .section-title {
 .map-image-card:hover .map-card-overlay { background: rgba(164, 195, 178, 0.3); }
 .map-image-card:hover .map-card-overlay span { background: var(--sage); border-color: var(--sage); }
 
-/* SOFT BUTTONS */
-.directions-btn {
-  display: inline-block;
-  padding: 15px 35px;
-  background-color: transparent;
-  color: var(--sage);
-  border: 1px solid var(--sage);
-  text-decoration: none;
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border-radius: var(--radius-pill);
-}
-
-.directions-btn:hover {
-  background-color: var(--sage);
-  color: white;
-  box-shadow: 0 5px 15px rgba(164, 195, 178, 0.3);
-}
-
-/* RSVP SYSTEM DESIGN UPDATE */
+/* RSVP STACK ARCHITECTURE */
 .rsvp-box { 
   background: white; 
   padding: 50px; 
@@ -477,7 +485,6 @@ h2, .section-title {
   letter-spacing: 1px;
 }
 
-/* VERTICAL FORM STACK LAYOUT CONFIGURATION */
 .guest-fields-stack {
   display: flex;
   flex-direction: column;
@@ -615,10 +622,7 @@ h2, .section-title {
 /* TRUE WINDOW VIEWPORT FIXED CONFETTI ENGINE */
 .confetti-container {
   position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none; 
   z-index: 9999; 
   overflow: hidden;
@@ -630,20 +634,159 @@ h2, .section-title {
   pointer-events: none;
 }
 
-/* MEDIA QUERIES FOR MOBILE COMPATIBILITY */
+/* ==========================================================================
+   LARGE SCREEN & ULTRA-WIDE MONITOR OPTIMIZATIONS
+   ========================================================================== */
+@media (min-width: 1400px) {
+  .hero-section::before,
+  .parallax-divider::before {
+    background-position: center 30% !important;
+  }
+}
+
+@media (min-width: 2000px) {
+  .hero-section::before {
+    background-size: 100% auto !important;
+    background-position: center center !important;
+  }
+  .main-text {
+    max-width: 750px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-height: 750px) and (min-width: 769px) {
+  .hero-section h1 { font-size: 3.5rem; }
+  .sticky-nav { top: 10px; padding: 10px 20px; }
+}
+
+/* ==========================================================================
+   CRITICAL MOBILE SCREEN OVERHAUL RE-ENGINE
+   ========================================================================== */
 @media (max-width: 768px) {
   .guest-fields-stack input,
   .guest-fields-stack select,
   .elegant-form textarea {
     padding: 14px 16px;
   }
-  .sticky-nav {
-    width: 85%;
-    top: 10px;
-    gap: 15px;
-    padding: 12px 20px;
-  }
+  
   h2, .section-title {
-    font-size: 2.4rem; /* Balanced downgrade scaling rule for mobile touch displays */
+    font-size: 2.4rem; 
+  }
+
+  /* FIXED THE POSITION BUG: Smoothly scales the whole button wrapper container up when active */
+  .sticky-nav {
+    position: fixed !important;
+    top: 20px; 
+    right: 20px; 
+    left: auto;
+    width: 52px; 
+    height: 52px;
+    padding: 0; 
+    margin: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 8px 25px rgba(164, 195, 178, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    overflow: hidden; /* Hides menu links cleanly while drawer is shut */
+    transition: all 0.4s cubic-bezier(0.1, 0.8, 0.25, 1);
+  }
+
+  /* Opens up context mapping boundary rules so it floods the mobile view perfectly */
+  .sticky-nav.mobile-nav-active {
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  /* Hamburger toggle switch mechanics */
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px; 
+    height: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10002;
+    outline: none;
+    position: absolute;
+    transition: all 0.3s ease;
+  }
+
+  /* Keeps the toggle button perfectly pinned in the top-right corner when overlay is active */
+  .sticky-nav.mobile-nav-active .menu-toggle {
+    top: 38px;
+    right: 35px;
+  }
+
+  .menu-toggle .bar {
+    width: 100%; 
+    height: 2px;
+    background-color: var(--text);
+    transition: transform 0.4s cubic-bezier(0.1, 0.8, 0.25, 1), opacity 0.3s ease, background-color 0.3s ease;
+    transform-origin: left center;
+  }
+
+  .menu-toggle .bar.open:nth-child(1) {
+    transform: rotate(45deg) translate(2px, -2px);
+    background-color: #C94A4A; 
+  }
+  
+  .menu-toggle .bar.open:nth-child(2) {
+    opacity: 0; 
+    transform: scaleX(0);
+  }
+  
+  .menu-toggle .bar.open:nth-child(3) {
+    transform: rotate(-45deg) translate(2px, 2px);
+    background-color: #C94A4A;
+  }
+
+  /* Full screen vertical drawer menu option container styles */
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Reveals the links with an elegant fade-in once container handles expansion */
+  .nav-links.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sticky-nav a {
+    font-family: var(--font-classy) !important; 
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--text);
+    padding: 8px 40px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .sticky-nav a:hover {
+    color: var(--sage);
   }
 }

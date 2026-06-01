@@ -66,8 +66,9 @@ function App() {
   const [submitError, setSubmitError] = useState(false);
   const [formData, setFormData] = useState({
     message: '',
-    guests: [{ name: '', status: '', menu: 'meat' }] // status re-initialized to '' for the placeholder
+    guests: [{ name: '', status: '', menu: 'meat' }]
   });
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +78,7 @@ function App() {
     const sanitizedGuests = formData.guests.map(guest => {
       const guestCopy = { ...guest };
       if (guestCopy.status !== 'yes') {
-        delete guestCopy.menu; // Protects backend datasets from false positive menu selections
+        delete guestCopy.menu;
       }
       return guestCopy;
     });
@@ -88,7 +89,7 @@ function App() {
     };
 
     try {
-      const response = await fetch('https://wedding-website-ahot.onrender.com', {
+      const response = await fetch('https://petyoandvictoriawedding.site/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sanitizedPayload),
@@ -108,7 +109,7 @@ function App() {
   const addGuestRow = () => {
     setFormData({
       ...formData,
-      guests: [...formData.guests, { name: '', status: '', menu: 'meat' }] // New rows prompt with placeholder
+      guests: [...formData.guests, { name: '', status: '', menu: 'meat' }]
     });
   };
 
@@ -189,14 +190,22 @@ function App() {
         </div>
       </section>
 
-      {/* STICKY NAVIGATION */}
-      <nav className="sticky-nav">
-        <a href="#home">НАЧАЛО</a>
-        <a href="#details">ДЕТАЙЛИ</a>
-        <a href="#calendar">КАЛЕНДАР</a>
-        <a href="#program">ПРОГРАМА</a>
-        <a href="#location">ЛОКАЦИЯ</a>
-        <a href="#rsvp">ПОТВЪРЖДЕНИЕ</a>
+      {/* FLOATING & RESPONSIVE NAVIGATION SYSTEM */}
+      <nav className={`sticky-nav ${menuOpen ? 'mobile-nav-active' : ''}`}>
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle Navigation">
+          <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${menuOpen ? 'open' : ''}`}></div>
+        </button>
+
+        <div className={`nav-links ${menuOpen ? 'show' : ''}`}>
+          <a href="#home" onClick={() => setMenuOpen(false)}>НАЧАЛО</a>
+          <a href="#details" onClick={() => setMenuOpen(false)}>ДЕТАЙЛИ</a>
+          <a href="#calendar" onClick={() => setMenuOpen(false)}>КАЛЕНДАР</a>
+          <a href="#program" onClick={() => setMenuOpen(false)}>ПРОГРАМА</a>
+          <a href="#location" onClick={() => setMenuOpen(false)}>ЛОКАЦИЯ</a>
+          <a href="#rsvp" onClick={() => setMenuOpen(false)}>ПОТВЪРЖДЕНИЕ</a>
+        </div>
       </nav>
 
       {/* LOVE QUOTE BANNER */}
@@ -295,7 +304,7 @@ function App() {
           <div className="timeline-list">
             <div className="t-item"><span>16:00 ч.</span><p>Welcome Drink</p></div>
             <div className="t-item"><span>16:30 ч.</span><p>Изнесен ритуал</p></div>
-            <div className="t-item"><span>17:15 ч.</span><p>Коктейл and снимки</p></div>
+            <div className="t-item"><span>17:15 ч.</span><p>Коктейл и снимки</p></div>
             <div className="t-item"><span>18:30 ч.</span><p>Начало на вечерята</p></div>
             <div className="t-item"><span>21:30 ч.</span><p>Торта и изненади</p></div>
           </div>
@@ -311,7 +320,7 @@ function App() {
 
           <div 
             className="map-image-card" 
-            onClick={() => window.open('https://maps.app.goo.gl/byAurQpv8XBwcn378', '_blank')}
+            onClick={() => window.open('https://maps.google.com', '_blank')}
           >
             <div className="map-card-overlay">
               <span>КЛИКНЕТЕ ЗА НАВИГАЦИЯ</span>
@@ -358,14 +367,12 @@ function App() {
                         </div>
 
                         <div className="form-field-row">
-                          {/* RESTORED: Optional placeholder prompt with required validation attribute */}
-                          <div>Ще присъствате ли?</div>
                           <select
                             required
                             value={guest.status}
                             onChange={e => handleGuestChange(index, 'status', e.target.value)}
                           >
-                            <option value=""></option>
+                            <option value="">Ще присъствате ли?</option>
                             <option value="yes">С удоволствие!</option>
                             <option value="no">Няма да успея</option>
                           </select>
@@ -378,7 +385,6 @@ function App() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.2 }}
                           >
-                            <div>Избор на меню</div>
                             <select
                               value={guest.menu}
                               onChange={e => handleGuestChange(index, 'menu', e.target.value)}

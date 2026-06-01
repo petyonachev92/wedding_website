@@ -48,3 +48,7 @@ app.post('/api/rsvp', async (req, res) => {
 });
 
 app.listen(5000, () => console.log('Server runner operational on port 5000'));
+
+app.get('/api/ping', (req, res) => {
+  res.status(200).send('Alive');
+});
