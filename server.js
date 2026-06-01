@@ -42,7 +42,7 @@ app.get('/api/ping', (req, res) => {
 });
 
 // The principal RSVP submission handler
-app.post('/api/rsvp', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const { message, guests } = req.body;
 
