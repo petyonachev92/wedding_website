@@ -10,7 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 // 2. MONGOOSE CONNECTION
-const MONGO_URI = process.env.MONGO_URI; 
+const MONGO_URI = process.env.MONGO_URI;
+console.log("Attempting to connect to MongoDB with URI:", MONGO_URI);
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Connected to MongoDB Atlas.'))
   .catch((err) => console.error('Database error:', err));
