@@ -31,7 +31,7 @@ const RsvpSchema = new mongoose.Schema({
 const Rsvp = mongoose.model('Rsvp', RsvpSchema);
 
 // 4. THE CORRECTED LISTENER (Matches your frontend root POST request)
-app.post('/', async (req, res) => {
+app.post('/api/rsvp', async (req, res) => {
   try {
     const { message, guests } = req.body;
 
