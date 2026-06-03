@@ -124,32 +124,6 @@ function App() {
     setFormData({ ...formData, guests: updatedGuests });
   };
 
-  const handleAddToCalendar = () => {
-    const icsStructure = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//Wedding Invitation//BG',
-      'BEGIN:VEVENT',
-      'UID=' + Date.now() + '@victoria-petio.wedding',
-      'DTSTART:20260823T130000Z', 
-      'DTEND:20260824T010000Z',   
-      'SUMMARY:Сватба: Виктория & Петьо',
-      'DESCRIPTION:Запазете датата за нашето сватбено тържество!\\nНачало: 16:00 ч. с Welcome Drink.\\nОчакваме ви!',
-      'LOCATION:Градина „Галени градини“\\, ул. „Стара планина“ 24\\, 1222 с. Войнеговци',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\n');
-
-    const blob = new Blob([icsStructure], { type: 'text/calendar;charset=utf-8;' });
-    const downloadLink = document.createElement('a');
-    downloadLink.href = window.URL.createObjectURL(blob);
-    downloadLink.setAttribute('download', 'wedding_victoria_petio.ics');
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
-
   return (
     <div className="timeless-wrapper">
       {/* SECTION 1: HERO */}
@@ -185,7 +159,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
           >
-            23 АВГУСТ 2026 | 16:00 ч.
+            23 АВГУСТ 2026
           </motion.p>
         </div>
       </section>
@@ -208,21 +182,6 @@ function App() {
         </div>
       </nav>
 
-      {/* LOVE QUOTE BANNER */}
-      <section className="quote-banner">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-        >
-          <p className="quote-text">
-            „Усещане за вечност, споделена радост и началото на една приказка, 
-            която пишем заедно всеки ден...“
-          </p>
-        </motion.div>
-      </section>
-
       {/* SECTION 2: INTRO & PHOTO */}
       <section className="info-section" id="details">
         <div className="container">
@@ -237,8 +196,9 @@ function App() {
               Скъпи роднини и приятели,
             </motion.h2>
             <p className="main-text">
-              С голямо вълнение и радост ви каним да споделите с нас началото на нашето съвместно приключение! 
-              Вашето присъствие ще направи този ден незабравим.
+              След десет красиви години заедно избираме да превърнем любовта си в още един красив спомен, споделен с хората, които обичаме.
+              Затова за нас ще бъде истинско щастие и чест да бъдете до нас в деня, в който ще си кажем „Да“. Вашата подкрепа, смехът 
+              и споделените моменти през годините са важна част от нашата история, а присъствието ви на този празник ще го направи наистина незабравимо.
             </p>
           </div>
           
@@ -253,7 +213,7 @@ function App() {
         <div className="container">
           <h2 className="section-title">Запазете датата</h2>
 
-          <div className="calendar-card" onClick={handleAddToCalendar}>
+          <div className="calendar-card">
             <div className="calendar-header">
               <h3>АВГУСТ 2026</h3>
             </div>
@@ -288,7 +248,6 @@ function App() {
                 );
               })}
             </div>
-            <p className="calendar-click-hint">Кликнете тук, за да добавите в календара си</p>
           </div>
         </div>
       </section>
@@ -304,9 +263,9 @@ function App() {
           <div className="timeline-list">
             <div className="t-item"><span>16:00 ч.</span><p>Welcome Drink</p></div>
             <div className="t-item"><span>16:30 ч.</span><p>Изнесен ритуал</p></div>
-            <div className="t-item"><span>17:15 ч.</span><p>Коктейл и снимки</p></div>
-            <div className="t-item"><span>18:30 ч.</span><p>Начало на вечерята</p></div>
-            <div className="t-item"><span>21:30 ч.</span><p>Торта и изненади</p></div>
+            <div className="t-item"><span>17:00 ч.</span><p>Коктейл и снимки</p></div>
+            <div className="t-item"><span>18:00 ч.</span><p>Начало на вечерята</p></div>
+            <div className="t-item"><span>21:30 ч.</span><p>Торта</p></div>
           </div>
         </div>
       </section>
@@ -320,7 +279,7 @@ function App() {
 
           <div 
             className="map-image-card" 
-            onClick={() => window.open('https://maps.google.com', '_blank')}
+            onClick={() => window.open('https://maps.app.goo.gl/byAurQpv8XBwcn378', '_blank')}
           >
             <div className="map-card-overlay">
               <span>КЛИКНЕТЕ ЗА НАВИГАЦИЯ</span>
@@ -331,6 +290,19 @@ function App() {
               className="map-card-img" 
             />
           </div>
+
+          <div className="location-instructions">
+            <p>
+              📍 Достъп с автомобил
+              <br />До локацията може да се стигне по два маршрута – през с. Локорско и през с. Войнеговци.
+              Препоръчваме маршрута през с. Локорско.
+            </p>
+
+            <p>
+              🚕 Достъп с такси<br />
+              Локацията се обслужва от таксиметровите компании в София.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -339,7 +311,7 @@ function App() {
         <div className="container rsvp-container">
           <div className="rsvp-box">
             <h2 className="section-title">Потвърждение</h2>
-            <p className="rsvp-deadline">Молим да потвърдите вашето присъствие до 01.07.2026 г.</p>
+            <p className="rsvp-deadline">Молим да потвърдите вашето присъствие до 21.06.2026 г.</p>
 
             {!submitted ? (
               <form onSubmit={handleSubmit} className="elegant-form">

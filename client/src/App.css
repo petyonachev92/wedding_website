@@ -70,7 +70,7 @@ body {
   content: "";
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), 
+  background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.25)), 
               url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2000');
   background-size: cover;
   background-position: center;
@@ -253,7 +253,7 @@ h2, .section-title {
 
 /* CALENDAR SECTION INTERACTIVITY */
 .calendar-section {
-  padding: 100px 0;
+  padding: 60px 0;
   background-color: var(--bg);
   text-align: center;
 }
@@ -268,25 +268,6 @@ h2, .section-title {
   border: 1px solid #eef2ef;
   cursor: pointer; 
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-}
-
-.calendar-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 45px rgba(164, 195, 178, 0.18);
-}
-
-.calendar-click-hint {
-  font-size: 0.68rem;
-  color: var(--gold);
-  letter-spacing: 1.5px;
-  margin: 25px 0 0 0;
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.calendar-card:hover .calendar-click-hint {
-  color: var(--sage); 
 }
 
 .calendar-header h3 {
@@ -378,6 +359,14 @@ h2, .section-title {
   margin-bottom: 30px;
 }
 
+.location-instructions {
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.9;
+  max-width: 630px;
+  margin: 0 auto 50px;
+}
+
 .map-image-card {
   position: relative;
   max-width: 800px;
@@ -398,11 +387,18 @@ h2, .section-title {
 
 .map-card-overlay {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
   background: rgba(0, 0, 0, 0.12);
+  
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;  /* Changed from 'center' to push the badge to the top edge */
+  padding-bottom: 35px;        /* Adds elegant breathing room from the top border */
+  box-sizing: border-box;   /* Prevents the padding from distorting the overlay size */
+  
   z-index: 2;
   transition: background 0.4s ease;
 }
@@ -569,7 +565,7 @@ h2, .section-title {
 }
 
 /* FOOTER */
-.footer { padding: 80px 0; text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #777; }
+.footer { padding: 60px 0; text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #777; }
 
 /* ERROR CONTAINERS */
 .error-message-box {
