@@ -58,7 +58,7 @@ app.get('/api/ping', (req, res) => {
 
 // 5. SERVE STATIC FILES
 app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
