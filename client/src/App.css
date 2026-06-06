@@ -271,11 +271,18 @@ h2, .section-title {
 }
 
 .calendar-header h3 {
-  font-weight: 600;
+  font-family: var(--font-classy) !important;
+  font-weight: 500;
   letter-spacing: 3px;
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   color: var(--text);
   margin-bottom: 25px;
+
+  /* FORCES NUMBERS TO MATCH THE HEIGHT AND ALIGNMENT OF CYRILLIC LETTERS */
+  font-variant-numeric: lining-nums;
+  -moz-font-feature-settings: "lnum" 1;
+  -webkit-font-feature-settings: "lnum" 1;
+  font-feature-settings: "lnum" 1;
 }
 
 .calendar-grid {
@@ -311,9 +318,37 @@ h2, .section-title {
   pointer-events: none;
 }
 
+.heart-marker {
+  position: absolute;
+  top: 46%; 
+  left: 50%;
+  transform: translate(-50%, -43%) !important; 
+  width: 60px;
+  height: 60px;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none !important;      /* Removes any trace of the old ring borders */
+  background: none !important;  /* Clears any leftover circle backgrounds */
+}
+
+/* Premium vibrant red filling and shading adjustments */
+.heart-svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--sage);                /* High-contrast romantic red fill color */
+  stroke: #77b894;              /* Crisp matching border accent alignment */
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .wedding-day {
-  color: var(--text) !important;
+  color: #ffffff !important;
   font-weight: 700;
+  font-size: 1.55rem !important;
 }
 
 .ring-marker {

@@ -135,7 +135,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            ПОКАНА ЗА СВАТБА
+            ПОКАНА ЗА СВАТБАТА НА
           </motion.p>
 
           <motion.h1 
@@ -197,8 +197,8 @@ function App() {
             </motion.h2>
             <p className="main-text">
               След десет красиви години заедно избираме да превърнем любовта си в още един красив спомен, споделен с хората, които обичаме.
-              Затова за нас ще бъде истинско щастие и чест да бъдете до нас в деня, в който ще си кажем „Да“. Вашата подкрепа, смехът 
-              и споделените моменти през годините са важна част от нашата история, а присъствието ви на този празник ще го направи наистина незабравимо.
+              Затова за нас ще бъде истинско щастие и чест да бъдете до нас в деня, в който ще си кажем „Да“. Вашата подкрепа 
+              и споделените моменти през годините са важна част от нашата история, а присъствието ви на този празник ще го направи наистина незабравим.
             </p>
           </div>
           
@@ -235,13 +235,15 @@ function App() {
 
                     {isWeddingDay && (
                       <motion.div 
-                        className="ring-marker"
+                        className="heart-marker"
                         initial={{ scale: 0, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
                       >
-                        <div className="diamond"></div>
+                        <svg viewBox="0 0 24 24" className="heart-svg">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
                       </motion.div>
                     )}
                   </div>
@@ -263,9 +265,9 @@ function App() {
           <div className="timeline-list">
             <div className="t-item"><span>16:00 ч.</span><p>Welcome Drink</p></div>
             <div className="t-item"><span>16:30 ч.</span><p>Изнесен ритуал</p></div>
-            <div className="t-item"><span>17:00 ч.</span><p>Коктейл и снимки</p></div>
-            <div className="t-item"><span>18:00 ч.</span><p>Начало на вечерята</p></div>
-            <div className="t-item"><span>21:30 ч.</span><p>Торта</p></div>
+            <div className="t-item"><span>17:00 ч.</span><p>Поздравления и снимки</p></div>
+            <div className="t-item"><span>18:00 ч.</span><p>Начало на празненството</p></div>
+            <div className="t-item"><span>21:30 ч.</span><p>Разрязване на тортата</p></div>
           </div>
         </div>
       </section>
@@ -275,7 +277,6 @@ function App() {
         <div className="container">
           <h2 className="section-title">Локация</h2>
           <p className="location-name">Галени градини, с. Войнеговци</p>
-          <p className="location-address">район Нови Искър село Войнеговци, 1223 София</p>
 
           <div 
             className="map-image-card" 
