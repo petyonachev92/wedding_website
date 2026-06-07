@@ -69,10 +69,12 @@ function App() {
     guests: [{ name: '', status: '', menu: 'meat' }]
   });
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError(false);
+    setIsSubmitting(true);
 
     // SANITIZATION SWEEP: Strip menu choices for any non-attending guests
     const sanitizedGuests = formData.guests.map(guest => {
@@ -103,6 +105,8 @@ function App() {
       }
     } catch (error) {
       setSubmitError(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -393,7 +397,13 @@ function App() {
                   </motion.div>
                 )}
 
-                <button type="submit" className="gold-btn">ИЗПРАТИ ПОТВЪРЖДЕНИЕ</button>
+                <button 
+                  type="submit" 
+                  className="gold-btn" 
+                  disabled={isSubmitting} // Prevents multiple accidental submissions
+                >
+                  {isSubmitting ? 'ОБРАБОТВА СЕ...' : 'ИЗПРАТИ ПОТВЪРЖДЕНИЕ'}
+                </button>
               </form>
             ) : (() => {
               const attendingCount = formData.guests.filter(g => g.status === 'yes').length;
