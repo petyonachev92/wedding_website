@@ -61,6 +61,161 @@ const ConfettiEffect = () => {
   );
 };
 
+// DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT
+const PhotoUploaderSection = () => {
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) return;
+
+    setIsUploading(true);
+    setStatus('Подготовка за качване...');
+    setProgress(0);
+
+    try {
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbwloYt6diWwEkF2mwuffIQP1tZCu8D2qzrGPb5-AM_PdpMJ3tGTxw9LVzlP38Cgq2lk/exec'; 
+      
+      // Step 1: Initialize resumable session
+      const initResponse = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' }, 
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type || 'application/octet-stream',
+          fileSize: file.size
+        })
+      });
+
+      const initData = await initResponse.json();
+      if (initData.status !== 'success') throw new Error(initData.message);
+
+      const resumableUrl = initData.resumableUrl;
+      const chunkSize = 5 * 1024 * 1024; // 5MB chunks
+      setStatus('Качване... моля, не затваряйте страницата.');
+
+      // Step 2: Upload in 5MB chunks sequentially
+      for (let start = 0; start < file.size; start += chunkSize) {
+        const end = Math.min(start + chunkSize, file.size);
+        const chunk = file.slice(start, end);
+
+        const uploadResponse = await fetch(resumableUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Range': `bytes ${start}-${end - 1}/${file.size}`
+          },
+          body: chunk
+        });
+
+        if (!uploadResponse.ok && uploadResponse.status !== 308) {
+           throw new Error('Връзката беше прекъсната.');
+        }
+
+        setProgress(Math.round((end / file.size) * 100));
+      }
+
+      setStatus('Качването е успешно! Благодарим ви за споделения спомен!');
+      setFile(null);
+      const fileInput = document.getElementById('wedding-file-input');
+      if (fileInput) fileInput.value = '';
+
+    } catch (err) {
+      console.error(err);
+      setStatus(`Грешка при качване: ${err.message || 'Моля, опитайте отново'}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <section className="rsvp-section" id="photos">
+      <div className="container rsvp-container">
+        <div className="rsvp-box">
+          <h2 className="section-title">Снимки & Видеа</h2>
+          <p className="rsvp-deadline">
+            Бъдете нашите фотографи! Споделете вашите снимки и видеа от празничния ден директно с нас.
+          </p>
+
+          <form onSubmit={handleUpload} className="elegant-form">
+            <div className="guest-row-card">
+              <div className="guest-fields-stack">
+                <div className="form-field-row">
+                  <input
+                    id="wedding-file-input"
+                    type="file"
+                    accept="image/*,video/*"
+                    disabled={isUploading}
+                    onChange={(e) => setFile(e.target.files[0])}
+                    style={{
+                      padding: '12px',
+                      borderRadius: '6px',
+                      border: '1px solid #ddd',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      backgroundColor: '#fff',
+                      cursor: isUploading ? 'not-allowed' : 'pointer'
+                    }}
+                  />
+                </div>
+
+                {file && (
+                  <p style={{ fontSize: '0.88rem', color: '#555', marginTop: '8px', textAlign: 'left' }}>
+                    Избран файл: <strong>{file.name}</strong> ({(file.size / (1024 * 1024)).toFixed(1)} MB)
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {progress > 0 && (
+              <div style={{
+                width: '100%',
+                backgroundColor: '#EFEFEF',
+                borderRadius: '8px',
+                height: '10px',
+                margin: '15px 0',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: `${progress}%`,
+                  backgroundColor: '#C5A059',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+            )}
+
+            {status && (
+              <p style={{
+                textAlign: 'center',
+                margin: '12px 0',
+                fontSize: '0.95rem',
+                color: status.includes('успешно') ? '#2e7d32' : '#444'
+              }}>
+                {status}
+              </p>
+            )}
+
+            <button 
+              type="submit" 
+              className="gold-btn" 
+              disabled={!file || isUploading}
+              style={{
+                opacity: (!file || isUploading) ? 0.6 : 1,
+                cursor: (!file || isUploading) ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isUploading ? `КАЧВАНЕ (${progress}%)...` : 'КАЧИ ФАЙЛ'}
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 function App() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
@@ -76,7 +231,6 @@ function App() {
     setSubmitError(false);
     setIsSubmitting(true);
 
-    // SANITIZATION SWEEP: Strip menu choices for any non-attending guests
     const sanitizedGuests = formData.guests.map(guest => {
       const guestCopy = { ...guest };
       if (guestCopy.status !== 'yes') {
@@ -182,6 +336,7 @@ function App() {
           <a href="#calendar" onClick={() => setMenuOpen(false)}>КАЛЕНДАР</a>
           <a href="#program" onClick={() => setMenuOpen(false)}>ПРОГРАМА</a>
           <a href="#location" onClick={() => setMenuOpen(false)}>ЛОКАЦИЯ</a>
+          <a href="#photos" onClick={() => setMenuOpen(false)}>СНИМКИ</a>
           <a href="#rsvp" onClick={() => setMenuOpen(false)}>ПОТВЪРЖДЕНИЕ</a>
         </div>
       </nav>
@@ -311,7 +466,10 @@ function App() {
         </div>
       </section>
 
-      {/* SECTION 6: RSVP */}
+      {/* SECTION 6: PHOTO & VIDEO UPLOADER */}
+      <PhotoUploaderSection />
+
+      {/* SECTION 7: RSVP */}
       <section className="rsvp-section" id="rsvp">
         <div className="container rsvp-container">
           <div className="rsvp-box">
@@ -400,7 +558,7 @@ function App() {
                 <button 
                   type="submit" 
                   className="gold-btn" 
-                  disabled={isSubmitting} // Prevents multiple accidental submissions
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? 'ОБРАБОТВА СЕ...' : 'ИЗПРАТИ ПОТВЪРЖДЕНИЕ'}
                 </button>
