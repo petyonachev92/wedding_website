@@ -33,6 +33,7 @@ const PhotoUploaderSection = () => {
           headers: { 'Content-Type': 'text/plain' }, 
           body: JSON.stringify({
             fileName: currentFile.name,
+            origin: window.location.origin,
             mimeType: currentFile.type || 'application/octet-stream',
             fileSize: currentFile.size
           })
