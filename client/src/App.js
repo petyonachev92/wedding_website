@@ -2,64 +2,74 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import './App.css';
 
-// DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT
+// DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT (MULTIPLE FILES)
 const PhotoUploaderSection = () => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file) return;
+    if (files.length === 0) return;
 
     setIsUploading(true);
     setStatus('Подготовка за качване...');
     setProgress(0);
 
+    let uploadedBytesTotal = 0;
+    const totalBytesAllFiles = files.reduce((acc, f) => acc + f.size, 0);
+
     try {
       const scriptUrl = 'https://script.google.com/macros/s/AKfycbwloYt6diWwEkF2mwuffIQP1tZCu8D2qzrGPb5-AM_PdpMJ3tGTxw9LVzlP38Cgq2lk/exec'; 
       
-      // Step 1: Initialize resumable session
-      const initResponse = await fetch(scriptUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' }, 
-        body: JSON.stringify({
-          fileName: file.name,
-          mimeType: file.type || 'application/octet-stream',
-          fileSize: file.size
-        })
-      });
+      // Loop through each selected file one by one
+      for (let i = 0; i < files.length; i++) {
+        const currentFile = files[i];
+        setStatus(`Качване на файл ${i + 1} от ${files.length}...`);
 
-      const initData = await initResponse.json();
-      if (initData.status !== 'success') throw new Error(initData.message);
-
-      const resumableUrl = initData.resumableUrl;
-      const chunkSize = 5 * 1024 * 1024; // 5MB chunks
-      setStatus('Качване... моля, не затваряйте страницата.');
-
-      // Step 2: Upload in 5MB chunks sequentially
-      for (let start = 0; start < file.size; start += chunkSize) {
-        const end = Math.min(start + chunkSize, file.size);
-        const chunk = file.slice(start, end);
-
-        const uploadResponse = await fetch(resumableUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Range': `bytes ${start}-${end - 1}/${file.size}`
-          },
-          body: chunk
+        // Step 1: Initialize resumable session for the current file
+        const initResponse = await fetch(scriptUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' }, 
+          body: JSON.stringify({
+            fileName: currentFile.name,
+            mimeType: currentFile.type || 'application/octet-stream',
+            fileSize: currentFile.size
+          })
         });
 
-        if (!uploadResponse.ok && uploadResponse.status !== 308) {
-           throw new Error('Връзката беше прекъсната.');
-        }
+        const initData = await initResponse.json();
+        if (initData.status !== 'success') throw new Error(initData.message);
 
-        setProgress(Math.round((end / file.size) * 100));
+        const resumableUrl = initData.resumableUrl;
+        const chunkSize = 30 * 1024 * 1024; // 30MB chunks
+
+        // Step 2: Upload in chunks sequentially
+        for (let start = 0; start < currentFile.size; start += chunkSize) {
+          const end = Math.min(start + chunkSize, currentFile.size);
+          const chunk = currentFile.slice(start, end);
+
+          const uploadResponse = await fetch(resumableUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Range': `bytes ${start}-${end - 1}/${currentFile.size}`
+            },
+            body: chunk
+          });
+
+          if (!uploadResponse.ok && uploadResponse.status !== 308) {
+             throw new Error(`Връзката беше прекъсната при файл: ${currentFile.name}`);
+          }
+
+          // Update total progress bar
+          uploadedBytesTotal += (end - start);
+          setProgress(Math.round((uploadedBytesTotal / totalBytesAllFiles) * 100));
+        }
       }
 
-      setStatus('Качването е успешно! Благодарим ви за споделения спомен!');
-      setFile(null);
+      setStatus('Всички файлове са качени успешно! Благодарим ви за споделените спомени!');
+      setFiles([]);
       const fileInput = document.getElementById('wedding-file-input');
       if (fileInput) fileInput.value = '';
 
@@ -87,9 +97,10 @@ const PhotoUploaderSection = () => {
                   <input
                     id="wedding-file-input"
                     type="file"
+                    multiple // ALLOWS MULTIPLE FILES TO BE SELECTED
                     accept="image/*,video/*"
                     disabled={isUploading}
-                    onChange={(e) => setFile(e.target.files[0])}
+                    onChange={(e) => setFiles(Array.from(e.target.files))} // CONVERT TO ARRAY
                     style={{
                       padding: '12px',
                       borderRadius: '6px',
@@ -102,10 +113,15 @@ const PhotoUploaderSection = () => {
                   />
                 </div>
 
-                {file && (
-                  <p style={{ fontSize: '0.88rem', color: '#555', marginTop: '8px', textAlign: 'left' }}>
-                    Избран файл: <strong>{file.name}</strong> ({(file.size / (1024 * 1024)).toFixed(1)} MB)
-                  </p>
+                {files.length > 0 && (
+                  <div style={{ marginTop: '12px', textAlign: 'left', fontSize: '0.88rem', color: '#555' }}>
+                    <strong>Избрани файлове: {files.length}</strong>
+                    <ul style={{ paddingLeft: '20px', marginTop: '6px', marginBottom: '0', maxHeight: '100px', overflowY: 'auto' }}>
+                      {files.map((f, index) => (
+                        <li key={index}>{f.name} ({(f.size / (1024 * 1024)).toFixed(1)} MB)</li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             </div>
@@ -142,13 +158,13 @@ const PhotoUploaderSection = () => {
             <button 
               type="submit" 
               className="gold-btn" 
-              disabled={!file || isUploading}
+              disabled={files.length === 0 || isUploading}
               style={{
-                opacity: (!file || isUploading) ? 0.6 : 1,
-                cursor: (!file || isUploading) ? 'not-allowed' : 'pointer'
+                opacity: (files.length === 0 || isUploading) ? 0.6 : 1,
+                cursor: (files.length === 0 || isUploading) ? 'not-allowed' : 'pointer'
               }}
             >
-              {isUploading ? `КАЧВАНЕ (${progress}%)...` : 'КАЧИ ФАЙЛ'}
+              {isUploading ? `КАЧВАНЕ (${progress}%)...` : 'КАЧИ ФАЙЛОВЕ'}
             </button>
           </form>
         </div>
@@ -210,32 +226,16 @@ function App() {
 
         <div className={`nav-links ${menuOpen ? 'show' : ''}`}>
           <a href="#home" onClick={() => setMenuOpen(false)}>НАЧАЛО</a>
-          <a href="#program" onClick={() => setMenuOpen(false)}>ПРОГРАМА</a>
-          <a href="#location" onClick={() => setMenuOpen(false)}>ЛОКАЦИЯ</a>
           <a href="#photos" onClick={() => setMenuOpen(false)}>СНИМКИ</a>
+          <a href="#location" onClick={() => setMenuOpen(false)}>ЛОКАЦИЯ</a>
+          <a href="#program" onClick={() => setMenuOpen(false)}>ПРОГРАМА</a>
         </div>
       </nav>
 
-      {/* PARALLAX IMAGE DIVIDER */}
-      <section className="parallax-divider"></section>
+      {/* SECTION 2: PHOTO & VIDEO UPLOADER */}
+      <PhotoUploaderSection />
 
-      {/* SECTION 4: PROGRAM */}
-      <section className="program-section" id="program">
-        <div className="container">
-          <h2 className="section-title">Програма</h2>
-          <p className="location-text">„Галени градини“, с. Войнеговци</p>
-          
-          <div className="timeline-list">
-            <div className="t-item"><span>16:00 ч.</span><p>Welcome Drink</p></div>
-            <div className="t-item"><span>16:30 ч.</span><p>Изнесен ритуал</p></div>
-            <div className="t-item"><span>17:00 ч.</span><p>Поздравления и снимки</p></div>
-            <div className="t-item"><span>18:00 ч.</span><p>Начало на празненството</p></div>
-            <div className="t-item"><span>21:30 ч.</span><p>Разрязване на тортата</p></div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5: LOCATION */}
+      {/* SECTION 3: LOCATION */}
       <section className="location-section" id="location">
         <div className="container">
           <h2 className="section-title">Локация</h2>
@@ -270,8 +270,21 @@ function App() {
         </div>
       </section>
 
-      {/* SECTION 6: PHOTO & VIDEO UPLOADER */}
-      <PhotoUploaderSection />
+      {/* SECTION 4: PROGRAM */}
+      <section className="program-section" id="program">
+        <div className="container">
+          <h2 className="section-title">Програма</h2>
+          <p className="location-text">„Галени градини“, с. Войнеговци</p>
+          
+          <div className="timeline-list">
+            <div className="t-item"><span>16:00 ч.</span><p>Welcome Drink</p></div>
+            <div className="t-item"><span>16:30 ч.</span><p>Изнесен ритуал</p></div>
+            <div className="t-item"><span>17:00 ч.</span><p>Поздравления и снимки</p></div>
+            <div className="t-item"><span>18:00 ч.</span><p>Начало на празненството</p></div>
+            <div className="t-item"><span>21:30 ч.</span><p>Разрязване на тортата</p></div>
+          </div>
+        </div>
+      </section>
 
       <footer className="footer">
         <p>ВИКТОРИЯ & ПЕТЬО</p>
