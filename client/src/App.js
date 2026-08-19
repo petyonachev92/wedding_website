@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import './App.css';
 
-// DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT (MULTIPLE FILES)
+// DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT (MULTIPLE FILES & MODERN UI)
 const PhotoUploaderSection = () => {
   const [files, setFiles] = useState([]);
   const [status, setStatus] = useState('');
@@ -28,7 +28,6 @@ const PhotoUploaderSection = () => {
         const currentFile = files[i];
         setStatus(`Качване на файл ${i + 1} от ${files.length}...`);
 
-        // Step 1: Initialize resumable session for the current file
         const initResponse = await fetch(scriptUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain' }, 
@@ -45,7 +44,6 @@ const PhotoUploaderSection = () => {
         const resumableUrl = initData.resumableUrl;
         const chunkSize = 30 * 1024 * 1024; // 30MB chunks
 
-        // Step 2: Upload in chunks sequentially
         for (let start = 0; start < currentFile.size; start += chunkSize) {
           const end = Math.min(start + chunkSize, currentFile.size);
           const chunk = currentFile.slice(start, end);
@@ -62,7 +60,6 @@ const PhotoUploaderSection = () => {
              throw new Error(`Връзката беше прекъсната при файл: ${currentFile.name}`);
           }
 
-          // Update total progress bar
           uploadedBytesTotal += (end - start);
           setProgress(Math.round((uploadedBytesTotal / totalBytesAllFiles) * 100));
         }
@@ -91,32 +88,60 @@ const PhotoUploaderSection = () => {
           </p>
 
           <form onSubmit={handleUpload} className="elegant-form">
-            <div className="guest-row-card">
+            <div className="guest-row-card" style={{ padding: '20px' }}>
               <div className="guest-fields-stack">
-                <div className="form-field-row">
+                <div className="form-field-row" style={{ textAlign: 'center' }}>
+                  
+                  {/* HIDING THE NATIVE INPUT */}
                   <input
                     id="wedding-file-input"
                     type="file"
-                    multiple // ALLOWS MULTIPLE FILES TO BE SELECTED
+                    multiple 
                     accept="image/*,video/*"
                     disabled={isUploading}
-                    onChange={(e) => setFiles(Array.from(e.target.files))} // CONVERT TO ARRAY
-                    style={{
-                      padding: '12px',
-                      borderRadius: '6px',
-                      border: '1px solid #ddd',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      backgroundColor: '#fff',
-                      cursor: isUploading ? 'not-allowed' : 'pointer'
-                    }}
+                    onChange={(e) => setFiles(Array.from(e.target.files))} 
+                    style={{ display: 'none' }} 
                   />
+
+                  {/* MODERN, MINIMALISTIC, SEMI-TRANSPARENT LABEL BUTTON */}
+                  <label 
+                    htmlFor="wedding-file-input"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '40px 20px',
+                      backgroundColor: 'transparent',
+                      border: '1px solid rgba(0, 0, 0, 0.2)',
+                      borderRadius: '12px',
+                      cursor: isUploading ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.3s ease',
+                      opacity: isUploading ? 0.5 : 1,
+                      color: '#444'
+                    }}
+                  >
+                    <svg 
+                      width="28" 
+                      height="28" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="1.2" 
+                      style={{ marginBottom: '10px', opacity: 0.7 }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span style={{ fontSize: '1rem', letterSpacing: '0.5px' }}>
+                      Изберете файлове
+                    </span>
+                  </label>
                 </div>
 
                 {files.length > 0 && (
-                  <div style={{ marginTop: '12px', textAlign: 'left', fontSize: '0.88rem', color: '#555' }}>
+                  <div style={{ marginTop: '16px', textAlign: 'left', fontSize: '0.88rem', color: '#555' }}>
                     <strong>Избрани файлове: {files.length}</strong>
-                    <ul style={{ paddingLeft: '20px', marginTop: '6px', marginBottom: '0', maxHeight: '100px', overflowY: 'auto' }}>
+                    <ul style={{ paddingLeft: '20px', marginTop: '8px', marginBottom: '0', maxHeight: '120px', overflowY: 'auto' }}>
                       {files.map((f, index) => (
                         <li key={index}>{f.name} ({(f.size / (1024 * 1024)).toFixed(1)} MB)</li>
                       ))}
