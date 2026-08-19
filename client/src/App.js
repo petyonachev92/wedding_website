@@ -1,65 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import './App.css';
-
-// SCREEN-WIDE CONFETTI ENGINE WITH 4-SECOND TIMEOUT
-const ConfettiEffect = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const countdown = setTimeout(() => {
-      setIsVisible(false);
-    }, 4000);
-    return () => clearTimeout(countdown);
-  }, []);
-
-  if (!isVisible) return null;
-
-  const pieces = Array.from({ length: 80 }); 
-  const colors = ['#C5A059', '#A4C3B2', '#FFFFFF', '#D1E2D9']; 
-
-  return (
-    <div className="confetti-container">
-      {pieces.map((_, i) => {
-        const leftPosition = Math.random() * 100; 
-        const dropDelay = Math.random() * 2.5; 
-        const fallDuration = 4 + Math.random() * 4; 
-        const pieceWidth = 6 + Math.random() * 8;
-        const pieceHeight = 10 + Math.random() * 12;
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-        const horizontalDrift = Math.random() * 160 - 80; 
-        const isCircleShape = Math.random() > 0.6; 
-
-        return (
-          <motion.div
-            key={i}
-            className="confetti-piece"
-            style={{
-              left: `${leftPosition}%`,
-              width: pieceWidth,
-              height: pieceHeight,
-              backgroundColor: randomColor,
-              borderRadius: isCircleShape ? '50%' : '3px',
-            }}
-            initial={{ y: "-10vh", x: 0, rotate: 0, opacity: 1 }}
-            animate={{ 
-              y: "110vh", 
-              x: horizontalDrift, 
-              rotate: Math.random() * 1440,
-              opacity: [1, 1, 1, 0] 
-            }}
-            transition={{ 
-              duration: fallDuration, 
-              ease: "linear", 
-              delay: dropDelay,
-              repeat: Infinity 
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
 
 // DIRECT GOOGLE DRIVE RESUMABLE UPLOADER COMPONENT
 const PhotoUploaderSection = () => {
@@ -217,70 +158,7 @@ const PhotoUploaderSection = () => {
 };
 
 function App() {
-  const [submitted, setSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
-  const [formData, setFormData] = useState({
-    message: '',
-    guests: [{ name: '', status: '', menu: 'meat' }]
-  });
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitError(false);
-    setIsSubmitting(true);
-
-    const sanitizedGuests = formData.guests.map(guest => {
-      const guestCopy = { ...guest };
-      if (guestCopy.status !== 'yes') {
-        delete guestCopy.menu;
-      }
-      return guestCopy;
-    });
-
-    const sanitizedPayload = {
-      ...formData,
-      guests: sanitizedGuests
-    };
-
-    try {
-      const response = await fetch('https://wedding-website-1-45ne.onrender.com/api/rsvp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sanitizedPayload),
-      });
-
-      if (response.ok) {
-        setSubmitted(true);
-        setSubmitError(false);
-      } else {
-        setSubmitError(true);
-      }
-    } catch (error) {
-      setSubmitError(true);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const addGuestRow = () => {
-    setFormData({
-      ...formData,
-      guests: [...formData.guests, { name: '', status: '', menu: 'meat' }]
-    });
-  };
-
-  const removeGuestRow = (index) => {
-    const updatedGuests = formData.guests.filter((_, i) => i !== index);
-    setFormData({ ...formData, guests: updatedGuests });
-  };
-
-  const handleGuestChange = (index, field, value) => {
-    const updatedGuests = [...formData.guests];
-    updatedGuests[index][field] = value;
-    setFormData({ ...formData, guests: updatedGuests });
-  };
 
   return (
     <div className="timeless-wrapper">
@@ -332,90 +210,16 @@ function App() {
 
         <div className={`nav-links ${menuOpen ? 'show' : ''}`}>
           <a href="#home" onClick={() => setMenuOpen(false)}>НАЧАЛО</a>
-          <a href="#details" onClick={() => setMenuOpen(false)}>ДЕТАЙЛИ</a>
-          <a href="#calendar" onClick={() => setMenuOpen(false)}>КАЛЕНДАР</a>
           <a href="#program" onClick={() => setMenuOpen(false)}>ПРОГРАМА</a>
           <a href="#location" onClick={() => setMenuOpen(false)}>ЛОКАЦИЯ</a>
           <a href="#photos" onClick={() => setMenuOpen(false)}>СНИМКИ</a>
-          <a href="#rsvp" onClick={() => setMenuOpen(false)}>ПОТВЪРЖДЕНИЕ</a>
         </div>
       </nav>
 
-      {/* SECTION 2: INTRO & PHOTO */}
-      <section className="info-section" id="details">
-        <div className="container">
-          <div className="text-block">
-            <motion.h2 
-              className="section-title"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} 
-              transition={{ duration: 0.8 }}
-            >
-              Скъпи роднини и приятели,
-            </motion.h2>
-            <p className="main-text">
-              След десет красиви години заедно избираме да превърнем любовта си в още един красив спомен, споделен с хората, които обичаме.
-              Затова за нас ще бъде истинско щастие и чест да бъдете до нас в деня, в който ще си кажем „Да“. Вашата подкрепа 
-              и споделените моменти през годините са важна част от нашата история, а присъствието ви на този празник ще го направи наистина незабравим.
-            </p>
-          </div>
-          
-          <div className="image-wrap">
-            <img src="https://raw.githubusercontent.com/petyonachev92/wedding_website/refs/heads/main/client/public/images/MPN03337.JPG" alt="Wedding Couple" className="mid-photo" />
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3: CALENDAR */}
-      <section className="calendar-section" id="calendar">
-        <div className="container">
-          <h2 className="section-title">Запазете датата</h2>
-
-          <div className="calendar-card">
-            <div className="calendar-header">
-              <h3>АВГУСТ 2026</h3>
-            </div>
-
-            <div className="calendar-grid">
-              {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'].map(day => (
-                <div key={day} className="calendar-day-label">{day}</div>
-              ))}
-
-              {[...Array(5)].map((_, i) => <div key={`empty-${i}`} className="empty"></div>)}
-              {[...Array(31)].map((_, i) => {
-                const day = i + 1;
-                const isWeddingDay = day === 23;
-                return (
-                  <div key={day} className="calendar-date-wrapper">
-                    <div className={`calendar-date ${isWeddingDay ? 'wedding-day' : ''}`}>
-                      {day}
-                    </div>
-
-                    {isWeddingDay && (
-                      <motion.div 
-                        className="heart-marker"
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
-                      >
-                        <svg viewBox="0 0 24 24" className="heart-svg">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                      </motion.div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 4: PROGRAM & PARALLAX IMAGE */}
+      {/* PARALLAX IMAGE DIVIDER */}
       <section className="parallax-divider"></section>
 
+      {/* SECTION 4: PROGRAM */}
       <section className="program-section" id="program">
         <div className="container">
           <h2 className="section-title">Програма</h2>
@@ -468,130 +272,6 @@ function App() {
 
       {/* SECTION 6: PHOTO & VIDEO UPLOADER */}
       <PhotoUploaderSection />
-
-      {/* SECTION 7: RSVP */}
-      <section className="rsvp-section" id="rsvp">
-        <div className="container rsvp-container">
-          <div className="rsvp-box">
-            <h2 className="section-title">Потвърждение</h2>
-            <p className="rsvp-deadline">Молим да потвърдите вашето присъствие до 21.06.2026 г.</p>
-
-            {!submitted ? (
-              <form onSubmit={handleSubmit} className="elegant-form">
-                <div className="guests-loop-container">
-                  {formData.guests.map((guest, index) => (
-                    <div key={index} className="guest-row-card">
-                      <div className="guest-row-header">
-                        <h4>{index === 0 ? "Вашите данни" : `Придружаващ гост №${index}`}</h4>
-                        {index > 0 && (
-                          <button type="button" className="remove-guest-btn" onClick={() => removeGuestRow(index)}>
-                            Премахни
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="guest-fields-stack">
-                        <div className="form-field-row">
-                          <input
-                            type="text"
-                            placeholder="Име и фамилия"
-                            required
-                            value={guest.name}
-                            onChange={e => handleGuestChange(index, 'name', e.target.value)}
-                          />
-                        </div>
-
-                        <div className="form-field-row">
-                          <select
-                            required
-                            value={guest.status}
-                            onChange={e => handleGuestChange(index, 'status', e.target.value)}
-                          >
-                            <option value="">Ще присъствате ли?</option>
-                            <option value="yes">С удоволствие!</option>
-                            <option value="no">Няма да успея</option>
-                          </select>
-                        </div>
-
-                        {guest.status === 'yes' && (
-                          <motion.div 
-                            className="form-field-row"
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <select
-                              value={guest.menu}
-                              onChange={e => handleGuestChange(index, 'menu', e.target.value)}
-                            >
-                              <option value="meat">Класическо меню</option>
-                              <option value="veggie">Вегетарианско меню</option>
-                              <option value="kids">Детско меню</option>
-                            </select>
-                          </motion.div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <button type="button" className="add-guest-action-btn" onClick={addGuestRow}>
-                  + ДОБАВЕТЕ ПРИДРУЖАВАЩ ГОСТ (партньор / дете)
-                </button>
-
-                <textarea
-                  placeholder="Бележки, важни детайли или алергии..."
-                  onChange={e => setFormData({ ...formData, message: e.target.value })}
-                />
-
-                {submitError && (
-                  <motion.div
-                    className="error-message-box"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <p>Възникна технически проблем. Моля, опитайте отново или се свържете с нас директно!</p>
-                  </motion.div>
-                )}
-
-                <button 
-                  type="submit" 
-                  className="gold-btn" 
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'ОБРАБОТВА СЕ...' : 'ИЗПРАТИ ПОТВЪРЖДЕНИЕ'}
-                </button>
-              </form>
-            ) : (() => {
-              const attendingCount = formData.guests.filter(g => g.status === 'yes').length;
-              const totalGuests = formData.guests.length;
-              const isAllYes = attendingCount === totalGuests && totalGuests > 0;
-
-              return (
-                <motion.div
-                  className="success-message-wrapper"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {isAllYes && <ConfettiEffect />}
-                  <h3>Благодарим ви!</h3>
-                  {attendingCount === 1 && (
-                    <p className="welcome-message-text">Ще те очакваме на нашата сватба!</p>
-                  )}
-                  {attendingCount > 1 && (
-                    <p className="welcome-message-text">Ще ви очакваме на нашата сватба!</p>
-                  )}
-                  {attendingCount === 0 && (
-                    <p className="welcome-message-text neutral">Вашият отговор беше записан.</p>
-                  )}
-                </motion.div>
-              );
-            })()}
-          </div>
-        </div>
-      </section>
 
       <footer className="footer">
         <p>ВИКТОРИЯ & ПЕТЬО</p>
