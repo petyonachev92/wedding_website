@@ -85,7 +85,7 @@ const PhotoUploaderSection = () => {
         <div className="rsvp-box">
           <h2 className="section-title">Снимки & Видеа</h2>
           <p className="rsvp-deadline">
-            Бъдете нашите фотографи! Споделете вашите снимки и видеа от празничния ден директно с нас.
+            Имаш много снимки и видеа от нашата сватба? Сподели ги с нас тук!
           </p>
 
           <form onSubmit={handleUpload} className="elegant-form">
